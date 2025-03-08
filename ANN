@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 
-# Load dataset (replace with actual file path)
+# Load dataset 
 st.title("Customer Churn Prediction using ANN")
 
 uploaded_file = st.file_uploader("Upload CSV dataset", type=["csv"])
