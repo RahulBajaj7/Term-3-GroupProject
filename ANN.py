@@ -43,7 +43,10 @@ optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
 model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
 # Train Model
-history = model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=50, batch_size=batch_size, verbose=0)
+history = model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=50, batch_size=batch_size, verbose=1)
+
+# Ensure matplotlib runs interactively
+plt.switch_backend('Agg')
 
 # Plot Loss Graph
 st.write("### Loss Graph")
@@ -64,3 +67,4 @@ ax.set_xlabel("Epochs")
 ax.set_ylabel("Accuracy")
 ax.legend()
 st.pyplot(fig)
+
