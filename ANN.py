@@ -14,12 +14,11 @@ df = pd.read_excel(git_file_path)
 st.write("### Dataset Overview")
 st.dataframe(df.head())
 
-# Preprocessing
-categorical_cols = ['Online Security', 'Online Backup', 'Device Protection', 'Tech Support', 'Streaming TV', 'Streaming Movies', 'Contract', 'Paperless Billing', 'Payment Method']
-for col in categorical_cols:
-    df[col] = LabelEncoder().fit_transform(df[col].astype(str))
+# Ensure all categorical features are properly converted to numeric
+df = df.apply(lambda col: LabelEncoder().fit_transform(col.astype(str)) if col.dtype == 'object' else col)
 
-X = df.drop(columns=['Churn Label', 'Churn Value', 'Churn Score', 'CLTV', 'Churn Reason'])
+# Define features and target
+X = df.drop(columns=['Churn Label', 'Churn Value', 'Churn Score', 'CLTV', 'Churn Reason'], errors='ignore')
 y = df['Churn Value']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
