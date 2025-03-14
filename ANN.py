@@ -79,25 +79,21 @@ with col2:
     st.pyplot(fig)
 
 # Churn Analysis
-st.write("## Churn Distribution Analysis & Feature Importance")
-col3, col4 = st.columns([2, 3])
+st.write("## Churn Distribution Analysis")
+fig, ax = plt.subplots(figsize=(12, 8))
+sns.histplot(y, bins=2, kde=True, ax=ax, color='deepskyblue')
+ax.set_title("Churn Distribution", fontsize=16)
+ax.set_xticks([0, 1])
+ax.set_xticklabels(["No Churn", "Churn"], fontsize=14)
+st.pyplot(fig)
 
-with col3:
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.histplot(y, bins=2, kde=True, ax=ax, color='deepskyblue')
-    ax.set_title("Churn Distribution", fontsize=14)
-    ax.set_xticks([0, 1])
-    ax.set_xticklabels(["No Churn", "Churn"], fontsize=12)
-    st.pyplot(fig)
+st.write("## Feature Importance")
+from sklearn.linear_model import LogisticRegression
 
-with col4:
-    st.write("### Feature Importance")
-    from sklearn.linear_model import LogisticRegression
-    
-    lr_model = LogisticRegression()
-    lr_model.fit(X_train, y_train)
-    feature_importance = pd.Series(abs(lr_model.coef_[0]), index=X.columns).sort_values(ascending=False)
-    fig, ax = plt.subplots(figsize=(12, 6))
-    sns.barplot(x=feature_importance.values, y=feature_importance.index, ax=ax, palette="magma")
-    ax.set_title("Feature Importance (Approximation)", fontsize=14)
-    st.pyplot(fig)
+lr_model = LogisticRegression()
+lr_model.fit(X_train, y_train)
+feature_importance = pd.Series(abs(lr_model.coef_[0]), index=X.columns).sort_values(ascending=False)
+fig, ax = plt.subplots(figsize=(12, 8))
+sns.barplot(x=feature_importance.values, y=feature_importance.index, ax=ax, palette="magma")
+ax.set_title("Feature Importance (Approximation)", fontsize=16)
+st.pyplot(fig)
