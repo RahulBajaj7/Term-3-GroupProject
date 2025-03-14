@@ -54,15 +54,15 @@ history = model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=e
 # Ensure matplotlib runs interactively
 plt.switch_backend('Agg')
 
-# Improved visualizations with aesthetics
+# Improved visualizations with vibrant aesthetics
 st.write("## Training Performance")
 col1, col2 = st.columns(2)
 
 with col1:
     st.write("### Loss Over Epochs")
-    fig, ax = plt.subplots()
-    sns.lineplot(x=range(1, epochs + 1), y=history.history['loss'], label='Train Loss', ax=ax)
-    sns.lineplot(x=range(1, epochs + 1), y=history.history['val_loss'], label='Validation Loss', ax=ax)
+    fig, ax = plt.subplots(figsize=(6, 4))
+    sns.lineplot(x=range(1, epochs + 1), y=history.history['loss'], label='Train Loss', ax=ax, color='crimson')
+    sns.lineplot(x=range(1, epochs + 1), y=history.history['val_loss'], label='Validation Loss', ax=ax, color='royalblue')
     ax.set_xlabel("Epochs")
     ax.set_ylabel("Loss")
     ax.legend()
@@ -70,35 +70,34 @@ with col1:
 
 with col2:
     st.write("### Accuracy Over Epochs")
-    fig, ax = plt.subplots()
-    sns.lineplot(x=range(1, epochs + 1), y=history.history['accuracy'], label='Train Accuracy', ax=ax)
-    sns.lineplot(x=range(1, epochs + 1), y=history.history['val_accuracy'], label='Validation Accuracy', ax=ax)
+    fig, ax = plt.subplots(figsize=(6, 4))
+    sns.lineplot(x=range(1, epochs + 1), y=history.history['accuracy'], label='Train Accuracy', ax=ax, color='darkorange')
+    sns.lineplot(x=range(1, epochs + 1), y=history.history['val_accuracy'], label='Validation Accuracy', ax=ax, color='mediumseagreen')
     ax.set_xlabel("Epochs")
     ax.set_ylabel("Accuracy")
     ax.legend()
     st.pyplot(fig)
 
 # Churn Analysis
-st.write("## Churn Distribution Analysis")
-col3, col4 = st.columns(2)
+st.write("## Churn Distribution Analysis & Feature Importance")
+col3, col4 = st.columns([2, 3])
 
 with col3:
-    fig, ax = plt.subplots()
-    sns.histplot(y, bins=2, kde=True, ax=ax)
-    ax.set_title("Churn Distribution")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.histplot(y, bins=2, kde=True, ax=ax, color='deepskyblue')
+    ax.set_title("Churn Distribution", fontsize=14)
     ax.set_xticks([0, 1])
-    ax.set_xticklabels(["No Churn", "Churn"])
+    ax.set_xticklabels(["No Churn", "Churn"], fontsize=12)
     st.pyplot(fig)
 
 with col4:
-    # Show feature importance (approximation using coefficients from logistic regression)
     st.write("### Feature Importance")
     from sklearn.linear_model import LogisticRegression
     
     lr_model = LogisticRegression()
     lr_model.fit(X_train, y_train)
     feature_importance = pd.Series(abs(lr_model.coef_[0]), index=X.columns).sort_values(ascending=False)
-    fig, ax = plt.subplots()
-    sns.barplot(x=feature_importance.values, y=feature_importance.index, ax=ax, palette="coolwarm")
-    ax.set_title("Feature Importance (Approximation)")
+    fig, ax = plt.subplots(figsize=(12, 6))
+    sns.barplot(x=feature_importance.values, y=feature_importance.index, ax=ax, palette="magma")
+    ax.set_title("Feature Importance (Approximation)", fontsize=14)
     st.pyplot(fig)
