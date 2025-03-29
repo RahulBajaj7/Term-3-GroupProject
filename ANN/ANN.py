@@ -12,7 +12,7 @@ st.set_page_config(page_title="Customer Churn Prediction", layout="wide")
 st.title("Customer Churn Prediction using ANN")
 
 # Load dataset from Git
-git_file_path = "Telco_customer_churn.xlsx"
+git_file_path = "./Telco_customer_churn.xlsx"
 df = pd.read_excel(git_file_path)
 
 # Preprocess categorical features
