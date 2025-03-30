@@ -4,10 +4,28 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.text import Tokenizer
+import requests
+import os
+
+# GitHub URL for your model
+model_url = "https://raw.githubusercontent.com/RahulBajaj7/Term-3-GroupProject/main/RNN/rb36tn52_sentiment_model.h5"
+model_path = "rb36tn52_sentiment_model.h5"
+
+# Download model if not present
+if not os.path.exists(model_path):
+    st.write("Downloading model from GitHub...")
+    response = requests.get(model_url)
+    if response.status_code == 200:
+        with open(model_path, 'wb') as f:
+            f.write(response.content)
+        st.write("Model Downloaded Successfully.")
+    else:
+        st.write("⚠️ Failed to download the model. Please check the URL.")
+        st.stop()
 
 # Load the model
 st.write("Loading the model...")
-model = load_model('rb36tn52_sentiment_model.h5')
+model = load_model(model_path)
 st.write("Model Loaded Successfully!")
 
 # Tokenizer setup
