@@ -3,7 +3,8 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.text import Tokenizer
+import re
+import string
 import os
 
 # GitHub URL for your model
@@ -28,17 +29,28 @@ st.write("Loading the model...")
 model = load_model(model_path)
 st.write("Model Loaded Successfully!")
 
-# Rebuild Tokenizer (Assuming we know vocabulary size and maxlen)
-st.write("Rebuilding tokenizer...")
-tokenizer = Tokenizer(num_words=5000)
-st.write("Tokenizer Initialized with 5000 words.")
+# Simple tokenizer function
+def simple_tokenizer(text):
+    # Lowercasing, removing punctuation, and splitting by spaces
+    text = text.lower()
+    text = re.sub(f"[{string.punctuation}]", "", text)
+    tokens = text.split()
+    return tokens
+
+# Convert tokens to numbers (simple mapping)
+word_index = {word: i + 1 for i, word in enumerate(set(" ".join(["good bad happy sad amazing terrible love hate excellent poor worst best satisfied disappointed"]).split()))}
+vocab_size = len(word_index) + 1
+
+def encode_text(text):
+    tokens = simple_tokenizer(text)
+    encoded_text = [word_index.get(word, 0) for word in tokens]
+    return pad_sequences([encoded_text], maxlen=100)
 
 # Function to predict sentiment
 def predict_sentiment(review, threshold=0.7):
-    # Convert review to sequence
-    seq = tokenizer.texts_to_sequences([review])
-    padded_seq = pad_sequences(seq, maxlen=100)
-
+    # Encode and pad the input
+    padded_seq = encode_text(review)
+    
     # Predict sentiment
     prediction = model.predict(padded_seq)[0][0]
     sentiment = 'Positive' if prediction >= threshold else 'Negative'
